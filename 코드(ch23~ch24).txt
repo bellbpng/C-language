@@ -1,0 +1,317 @@
+#####ch23#####
+23-1
+<문제1>
+#include <stdio.h>
+
+typedef struct point
+{
+	int xpos;
+	int ypos;
+} Point;
+
+void swap(Point p1, Point p2)
+{
+	Point temp;
+	temp = p1;
+	p1 = p2;
+	p2 = temp;
+	printf("(x1, y1) = (%d, %d) \n", p1.xpos, p1.ypos);
+	printf("(x2, y2) = (%d, %d) \n", p2.xpos, p2.ypos);
+
+}
+
+int main()
+{
+	Point pos1, pos2;
+	fputs("(x1, y1) 입력 : ", stdout); // 
+	scanf("%d %d", &pos1.xpos, &pos1.ypos);
+	fputs("(x2, y2) 입력 : ", stdout);
+	scanf("%d %d", &pos2.xpos, &pos2.ypos); // 각각 구조체 변수 초기화
+	printf("(x1, y1) = (%d, %d) \n", pos1.xpos, pos1.ypos);
+	printf("(x2, y2) = (%d, %d) \n", pos2.xpos, pos2.ypos);
+	printf("\nLet's Swaping !! \n\n");
+	swap(pos1, pos2);
+	return 0;
+}
+
+23-2
+<문제1>
+#include <stdio.h>
+
+typedef struct point
+{
+	int xpos;
+	int ypos;
+} rec;
+
+void Surface(rec p1, rec p2)
+{
+	int s = (p2.xpos - p1.xpos) * (p2.ypos - p1.ypos);
+	printf("직사각형의 넓이 : %d \n", s);
+}
+
+void dot(rec p1, rec p2)
+{
+	printf("좌 상단 (%d, %d) \n", p1.xpos, p1.ypos);
+	printf("우 상단 (%d, %d) \n", p2.xpos, p1.ypos);
+	printf("좌 하단 (%d, %d) \n", p1.xpos, p2.ypos);
+	printf("우 하단 (%d, %d) \n", p2.xpos, p2.ypos);
+}
+
+int main()
+{
+	rec pos1 = { 1, 1 };
+	rec pos2 = { 6, 7 };
+	Surface(pos1, pos2);
+	printf("\n");
+	dot(pos1, pos2);
+	return 0;
+}
+
+####ch24#####
+예제 - 문자 단위로 문자열을 복사하는 프로그램
+#include <stdio.h>
+
+int main()
+{
+	FILE* src = fopen("src.txt", "rt");
+	FILE* des = fopen("dst.txt", "wt");
+	int ch;
+	char arr[30];
+	int len = 0;
+
+	if (src == NULL || des == NULL) {
+		puts("파일오픈 실패!");
+		return -1;
+	}
+
+	while ((ch = fgetc(src)) != EOF)
+		fputc(ch, des); // src에 문자열을 des로 옮기는 과정
+
+	if (feof(src) != 0)
+		puts("파일복사 완료!");
+	else
+		puts("파일복사 실패!");
+
+	printf("\n");
+
+	
+	fclose(src);
+	fclose(des);
+
+	return 0;
+}
+
+예제 - 문자열 단위로 복사하는 프로그램
+#include <stdio.h>
+
+int main()
+{
+	FILE* src = fopen("src.txt", "rt");
+	FILE* des = fopen("des.txt", "wt");
+	char str[30];
+
+	/* 파일에 읽어드릴 내용이 있는지 확인 */
+	if (src == NULL || des == NULL) {
+		puts("파일오픈 실패!");
+		return -1;
+	}
+
+	while (fgets(str, sizeof(str), src) != NULL)
+		fputs(str, des);
+
+	if (feof(src) != 0) // 파일의 끝에 도달하여 더이상 읽어드릴 내용이 없다
+		puts("파일복사 완료!");
+	else
+		puts("파일복사 실패!");
+
+	fclose(src);
+	fclose(des);
+
+	return 0;
+
+}
+
+
+예제 - 바이너리파일 복사
+#include <stdio.h>
+
+int main()
+{
+	FILE* src = fopen("src.bin", "rb");
+	FILE* des = fopen("des.bin", "wb");
+	char buf[20];
+	int readCnt;
+
+	if (src == NULL || des == NULL) {
+		puts("파일오픈 실패! ");
+		return -1;
+	}
+
+	while (1)
+	{
+		readCnt = fread((void*)buf, 1, sizeof(buf), src);
+
+		if (readCnt < sizeof(buf))
+		{
+			if (feof(src != 0))
+			{
+				fwrite((void*)buf, 1, readCnt, des);
+				puts("파일복사 완료! ");
+				break;
+			}
+			else
+				puts("파일복사 실패! ");
+			break;
+		}
+		
+		fwrite((void*)buf, 1, sizeof(buf), des);
+
+	}
+
+	fclose(src);
+	fclose(des);
+
+	return 0;
+}
+
+24-1
+<문제1>
+#include <stdio.h>
+
+int main()
+{
+	FILE* mys = fopen("mystory.txt", "wt");
+	fputs("#이름: 김보경 \n", mys);
+	fputs("#주민번호: 970409-1012589 \n", mys);
+	fputs("#전화번호: 010-9617-1580 \n", mys);
+	fclose(mys);
+	return 0;
+}
+
+<문제2>
+#include <stdio.h>
+
+int main()
+{
+	FILE* mys = fopen("mystory.txt", "at");
+	fputs("#즐겨먹는 음식: 짜장면, 탕수육 \n", mys);
+	fputs("취미: 축구 \n", mys);
+	fclose(mys);
+	return 0;
+}
+
+<문제3> : 문제1 + 문제2 통합 버전
+#include <stdio.h>
+
+void write1(FILE* stream)
+{
+	fputs("#이름: 김보경 \n", stream);
+	fputs("#주민번호: 970409-1012589 \n", stream);
+	fputs("#전화번호: 010-9617-1580 \n", stream);
+}
+void write2(FILE* stream)
+{
+	fputs("#즐겨먹는 음식: 짜장면, 탕수육 \n", stream);
+	fputs("#취미: 축구 \n", stream);
+}
+
+int main()
+{
+	char str[100];
+
+	FILE* mys = fopen("mystory.txt", "wt");
+	write1(mys);
+	fclose(mys);
+
+	FILE* remys = fopen("mystory.txt", "at");
+	write2(remys);
+	fclose(remys);
+
+	FILE* read = fopen("mystory.txt", "rt");
+
+	while (fgets(str, sizeof(str), read) != NULL) // 반복문으로 구성하여야 파일 전체내용을 읽을 수 있음
+		puts(str); // 입력버퍼에 저장된 문자열을 \n을 기준으로 차례대로 읽어들임. 따라서 입력버퍼가 비워졌을 때(fgets == NULL) 반복문을 빠져나옴.
+				   //  따라서 입력버퍼가 비워졌을 때(fgets == NULL) 반복문을 빠져나옴.
+	fclose(read); 
+
+	return 0;
+} 
+
+24-2
+<문제>
+#include <stdio.h>
+
+long size(FILE* stream)
+{
+	long cur;
+	long len;
+	cur = ftell(stream);
+
+	/*fseek(stream, 0, SEEK_END);*/
+	len = ftell(stream);
+	fseek(stream, cur, SEEK_SET);
+
+	return len;
+}
+
+int main()
+{
+	char str[50];
+	FILE* data = fopen("data.txt", "rt");
+
+	while (fgets(str, sizeof(str), data) != NULL) // 파일 위치 지시자는 EOF를 가리키는 상태.
+		puts(str);
+
+	printf("파일의 크기를 바이트로 계산 : %ld bytes \n", size(data));
+
+	fclose(data);
+
+	return 0;
+}
+
+답안
+#include <stdio.h>
+
+long GetFileSize(FILE* fp);
+
+int main()
+{
+	char str[100];
+	FILE* fp = fopen("data.txt", "rt");
+	fgets(str, 100, fp);
+	fputs(str, stdout);
+	printf("파일의 크기: %ld \n", GetFileSize(fp));
+	fgets(str, 100, fp);
+	fputs(str, stdout);
+	printf("파일의 크기: %ld \n", GetFileSize(fp));
+	fgets(str, 100, fp);
+	fputs(str, stdout);
+	printf("파일의 크기: %ld \n", GetFileSize(fp));
+	fclose(fp);
+	return 0;
+}
+
+long GetFileSize(FILE* fp)
+{
+	long fpos;
+	long fsize;
+	fpos = ftell(fp);
+
+	fseek(fp, 0, SEEK_END);
+	fsize = ftell(fp);
+	fseek(fp, fpos, SEEK_SET);
+	return fsize;
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,249 @@
+#####ch21######
+21-1
+<문제1>
+#include <stdio.h>
+
+int conv(int n)
+{
+	int diff = 'a' - 'A'; // 아스키코드에서 소문자와 대문자의 차는 일정. 
+	if (n >= 'A' && n <= 'Z')
+		return n + diff; // a = A + diff를 이용하여 대문자가 입력되었을 때 소문자를 출력
+	else if (n >= 'a' && n <= 'z')
+		return n - diff; // A = a - diff를 이용하여 소문자가 입력되었을 때 대문자를 출력
+	else
+		return -1;
+}
+int main()
+{
+	int ch;
+	printf("문자 입력 : ");
+	ch = getchar();
+	if (conv(ch) == -1)
+		printf("잘못된 입력입니다. \n");
+	else
+		putchar(conv(ch));
+
+	return 0;
+}
+
+21-2
+<문제1>
+#include <stdio.h>
+#include <string.h>
+
+int conv(char c)
+{
+	static int diff = 1 - '1'; // 모든 숫자 n와 'n'의 차는 일정
+	return diff + c; // 문자형태의 숫자를 정수로 전환
+}
+int main()
+{
+	char arr[50];
+	int len;
+	int sum = 0;
+
+	printf("아무 문자열을 입력 : ");
+	fgets(arr, sizeof(arr), stdin);
+	len = strlen(arr);
+
+	for (int i = 0; i < len; i++)
+	{
+		if ('0' <= arr[i] && arr[i] <= '9') // 대수비교이므로 각각 아스키코드값으로 변환됨
+		{
+			sum += conv(arr[i]); // 변환된 정수를 차례로 합함
+		}
+	}
+	printf("문자열 속 정수의 합 : %d \n", sum);
+
+	return 0;
+}
+
+<문제2>
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	char str1[20];
+	char str2[20];
+	char str3[20];
+	int len;
+
+	printf("문자열을 입력1 : ");
+	fgets(str1, sizeof(str1), stdin);
+	len = strlen(str1); // 엔터키를 포함한 문자열의 길이
+	printf("문자열을 입력2 : ");
+	fgets(str2, sizeof(str2), stdin);
+
+	strncpy_s(str3,20,str1,len-1); // 엔터키를 제외한 문자열을 str3에 복사
+	strcat_s(str3, 20, str2);
+
+	fputs(str3, stdout);
+
+	return 0;
+
+}
+
+<문제3>
+#include <stdio.h>
+#include <string.h>
+
+/* 배열에 나이만 저장하는 함수 */
+void Name(char arr1[], char arr2[], int e1, int e2)
+{
+	char name1[50];
+	char name2[50];
+	int temp;
+	for (int i = 0; i <= e1; i++)
+		name1[i] = arr1[i]; // 공백문자까지 저장됨
+	for (int j = 0; j <= e2; j++)
+		name2[j] = arr2[j];
+	name1[e1 + 1] = 0; // 널문자 삽입
+	name2[e2 + 1] = 0; 
+	temp = strcmp(name1, name2);
+	if (temp != 0)
+		printf("이름이 다릅니다. \n");
+	else
+		printf("이름이 같습니다. \n");
+}
+
+/* 배열에 이름만 저장하는 함수 */
+void age(char arr1[], char arr2[], int e1, int e2, int l1, int l2)
+{
+	char age1[50];
+	char age2[50];
+	int temp;
+	int x = l1 - e1 - 1; // 공백을 제외하고 나이 부분만 배열에 저장.
+	int y = l2 - e2 - 1;
+
+	for (int i = 0; i < x; i++)
+		age1[i] = arr1[e1 + 1 + i]; // 공백문자 다음 자리부터 저장
+	for (int j = 0; j < y; j++)
+		age2[j] = arr2[e2 + 1 + j]; // 공백문자 다음 자리부터 저장
+	age1[x] = 0; // 널문자 삽입
+	age2[y] = 0; 
+	temp = strcmp(age1, age2);
+	if (temp != 0)
+		printf("나이가 다릅니다. \n");
+	else
+		printf("나이가 같습니다. \n");
+}
+
+int main()
+{
+	char str1[50];
+	char str2[50];
+	int len1, len2;
+	int noempty1, noempty2;
+	int i = 0;
+	int j = 0;
+
+	printf("이름과 나이를 입력하시오.(공백으로 구분) : ");
+	fgets(str1, sizeof(str1), stdin);
+	len1 = strlen(str1); // 널문자를 제외한 문자열의 길이
+	while (1)
+	{
+		if (str1[i] == ' ')
+		{
+			noempty1 = i; // 공백문자를 제외한 문자열의 길이
+			break;
+		}
+		i++;
+	}
+	printf("이름과 나이를 입력하시오.(공백으로 구분) : ");
+	fgets(str2, sizeof(str2), stdin);
+	len2 = strlen(str2); // 널문자를 제외한 문자열의 길이
+	while (1)
+	{
+		if (str2[j] == ' ')
+		{
+			noempty2 = j; // 공백문자를 제외한 문자열의 길이
+			break;
+		}
+		j++;
+	}
+
+	Name(str1, str2, noempty1, noempty2); // 이름만 저장된 배열을 비교
+	age(str1, str2, noempty1, noempty2, len1, len2); // 나이만 저장된 배열을 비교
+
+	return 0;
+}
+
+
+#####ch22#####
+22-1
+<문제1>
+#include <stdio.h>
+
+struct employee
+{
+	char name[50];
+	char number[50];
+	int pay;
+};
+
+int main()
+{
+	struct employee person;
+	fputs("종업원 이름 / 주민등록번호 / 급여정보(만원 단위) 입력 : \n", stdout);
+	fgets(person.name, 50, stdin);
+	fgets(person.number, 50, stdin);
+	scanf("%d", &person.pay); // 입력 scanf("%s %s %d", person.name, person.number, &person.pay); 대체가능
+	printf("\n이름 : %s \n주민등록번호 : %s \n급여정보 : %d만원 \n", person.name, person.number, person.pay);
+
+	return 0;
+}
+
+22-2
+<문제2>
+#include <stdio.h>
+
+struct emp
+{
+	char name[50];
+	char number[50];
+	int pay;
+};
+
+int main()
+{
+	struct emp person[3];
+	for (int i = 0; i < 3; i++)
+	{
+		printf("%d번 종업원 이름 / 주민등록번호 / 급여(만원단위) 입력 : ",i+1);
+		scanf("%s %s %d", &person[i].name, &person[i].number, &person[i].pay); // 구조체 배열의 각각 요소에 해당하므로 &연산자 사용
+	}
+	printf("\n");
+	for (int j = 0; j < 3; j++)
+		printf("%d번 종업원 이름 : %s / 주민등록번호 : %s / 급여(만원단위) :%d \n", j+1, person[j].name, person[j].number, person[j].pay);
+	
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

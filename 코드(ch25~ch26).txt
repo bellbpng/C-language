@@ -1,0 +1,141 @@
+#####ch25####
+<문제1>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main()
+{
+	int maxlen, len, i;
+	char* str;
+	printf("문자열의 최대 길이 입력 : ");
+	scanf("%d", &maxlen);
+	getchar(); // \n 문자 삭제
+	str = (char*)malloc(sizeof(char) * (maxlen + 1)); // 널문자까지 포함
+
+	printf("문자열 입력: ");
+	fgets(str, maxlen + 1, stdin);
+	str[strlen(str) - 1] = 0; // \n문자 삭제
+	len = strlen(str); // 순수 문자의 실제 길이정보
+
+	for (i = len; i > 0; i--)
+	{
+		if (str[i] == ' ') // 공백문자를 기준으로
+		{
+			printf("%s ", &str[i + 1]);
+			str[i] = 0; // 공백문자 위치에 문장의 끝을 선언
+		}
+	}
+	printf("%s", str); // 맨 앞 문자열 호출
+	free(str);
+	return 0;
+}
+
+<문제2>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+	int* ptr = (int*)malloc(sizeof(int) * 5);
+	int i = 0;
+	int x = 5; // 배열 개수
+
+	while (1)
+	{
+		printf("정수를 입력(-1 to quit): ");
+		scanf("%d", &ptr[i]);
+
+		if (ptr[i] == -1)
+			break;
+
+		if (i == x-1)
+		{
+			x += 3;
+			ptr = (int*)realloc(ptr, sizeof(int) * x); // sizeof(int)*x로!! 늘린다.
+		}
+		i++;
+	}
+
+	for (int j = 0; j < i; j++)
+		printf("%d ", ptr[j]); // -1이 들어있는 배열요소 제외하고 출력
+
+	free(ptr);
+
+	return 0;
+}
+
+######ch26#####
+<문제1>
+#include <stdio.h>
+#define SUM(A,B,C) ((A)+(B)+(C))
+#define MPT(A,B,C) ((A)*(B)*(C))
+
+int main()
+{
+	int n1, n2, n3;
+	printf("세 개의 정수를 입력 : ");
+	scanf("%d %d %d", &n1, &n2, &n3);
+
+	printf("세 정수의 덧셈결과 : %d \n", SUM(n1, n2, n3));
+	printf("세 정수의 곱셈결과 : %d \n", MPT(n1, n2, n3));
+
+	return 0;
+}
+
+<문제2>
+#include <stdio.h>
+#define PI 3.14
+#define AREA(r) ((PI)*(r)*(r)) 
+
+int main()
+{
+	double hd;
+
+	printf("원의 반지름 입력 : ");
+	scanf("%lf", &hd); // double형이 8바이트 크기이므로, %lf(4+4)로 입력
+	printf("원의 넓이 : %f \n", AREA(hd));
+
+	return 0;
+}
+
+<문제3>
+#include <stdio.h>
+#define SUM(A,B,C) ((A)+(B)+(C))
+#define MPT(A,B,C) ((A)*(B)*(C))
+
+int main()
+{
+	int n1, n2, n3;
+	printf("세 개의 정수를 입력 : ");
+	scanf("%d %d %d", &n1, &n2, &n3);
+
+	printf("세 정수의 덧셈결과 : %d \n", SUM(n1, n2, n3));
+	printf("세 정수의 곱셈결과 : %d \n", MPT(n1, n2, n3));
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,178 @@
+<도전1>
+#include <stdio.h>
+
+typedef struct book
+{
+	char name[50];
+	char title[50];
+	int page;
+} Book;
+
+int main()
+{
+	Book arr[3];
+	//도서정보 입력받기
+	printf("도서 정보 입력 \n");
+	for (int i = 0; i < 3; i++)
+	{
+		printf("저자: ");
+		fgets(arr[i].name, 50, stdin); // \n 을 포함
+		printf("제목: ");
+		fgets(arr[i].title, 50, stdin);		
+		printf("페이지 수: ");
+		scanf("%d", &arr[i].page);
+		getchar(); // scanf의 경우 \n을 입력버퍼에 남겨둔다
+		printf("\n");
+	}
+	//입력받은 정보 출력하기
+	printf("도서 정보 출력 \n");
+	for (int j = 0; j < 3; j++)
+	{
+		printf("book%d \n", j + 1);
+		printf("저자: %s제목: %s페이지수: %d \n", arr[j].name, arr[j].title, arr[j].page);
+		printf("\n");
+	}
+
+	return 0;
+}
+
+<도전2>
+#include <stdio.h>
+#include <stdlib.h>
+
+
+typedef struct book {
+	char author[30];
+	char title[30];
+	int page;
+} Book;
+
+int main()
+{
+	Book* arr[3]; // Book 구조체 변수를 가리키는 포인터 배열을 선언
+
+	printf("도서 정보 입력 \n");
+	for (int i = 0; i < 3; i++)
+	{
+		Book* bptr = (Book*)malloc(sizeof(Book));
+		printf("저자: ");
+		fgets(bptr->author, 30, stdin);
+		printf("제목: ");
+		fgets(bptr->title, 30, stdin);
+		printf("페이지 수: ");
+		scanf("%d", &(bptr->page));
+		getchar(); // 입력버퍼 비우기
+		arr[i] = bptr; // bptr의 내용을 arr을 통해 배열 형태로 저장
+	}
+	printf("\n");
+	printf("도서 정보 출력 \n");
+	for (int j = 0; j < 3; j++)
+	{
+		printf("book%d \n", j + 1);
+		printf("저자: %s제목: %s페이지 수: %d \n", arr[j]->author, arr[j]->title, arr[j]->page);
+		printf("\n");
+		free(arr[j]); // 할당된 메모리 해제
+	}
+	return 0;
+}
+
+<도전3>
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct complex {
+	double real;
+	double imag;
+}Complex;
+
+void Add(Complex num1, Complex num2)
+{
+	double n1 = num1.real + num2.real;
+	double n2 = num1.imag + num2.imag;
+	printf("[합의 결과] 실수: %lf, 허수: %lf \n", n1, n2);
+}
+
+void Multiple(Complex num1, Complex num2)
+{
+	double m1 = (num1.real) * (num2.real) - (num1.imag) * (num2.imag);
+	double m2 = (num1.imag) * (num2.real) + (num1.real) * (num2.imag);
+	printf("[곱의 결과] 실수: %lf, 허수: %lf \n", m1, m2);
+}
+
+int main()
+{
+	Complex num1, num2;
+	double n1, n2; // 합의 결과 저장
+	double m1, m2; // 곱의 결과 저장
+
+	printf("복소수 입력1[실수 허수]: ");
+	scanf("%lf %lf", &num1.real, &num1.imag);
+	printf("복소수 입력2[실수 허수]: ");
+	scanf("%lf %lf", &num2.real, &num2.imag);
+	Add(num1, num2);
+	Multiple(num1, num2);
+
+	return 0;
+}
+
+<도전4>
+#include <stdio.h>
+
+void Clearbuffer()
+{
+	while (getchar() != '\n'); // \n문자를 읽어들일 때까지 반복
+}
+
+int main()
+{
+	char str[30];
+	int ret;
+	int Anum = 0;
+	int Pnum = 0;;
+
+	FILE* fp = fopen("text.txt", "rt");
+
+	while (1) // 반복문으로 구성하면 덧붙여 쓰여진다
+	{
+		ret = fscanf(fp, "%s", str); // 공백문자(space, \n, \t) 기준으로 나누어 읽어들인다
+		Clearbuffer;
+		if (str[0] == 'A')
+			Anum++;
+		if (str[0] == 'P')
+			Pnum++;
+
+		str[0] = NULL; // 문자열이 저장된 배열 초기화
+		if (ret == EOF) // fscanf함수는 파일의 끝에 도달하면 EOF를 반환
+			break;
+	}
+
+	fclose(fp);
+	printf("A로 시작하는 단어의 수: %d \n", Anum);
+	printf("P로 시작하는 단어의 수: %d \n", Pnum);
+
+	return 0;
+} // cmd 실행이 안되는 이유가 뭘까....ㅜㅠ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
